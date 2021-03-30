@@ -1,0 +1,26 @@
+.bot-cover-photo {
+    width: 100vw;
+}
+
+.human-input {
+    padding-left: 30vw;
+    padding-right: 30vw;
+    margin: 10px;
+}
+
+#user-input {
+    background-color: rgba(108, 113, 250, 0.79);
+    padding: 1px;
+    border-radius: 10px;
+}
+
+#bot-reply {
+    background-color: rgba(231, 228, 228, 0.865);
+    padding: 1px;
+    border-radius: 10px;
+}
+
+.conversation-box {
+    padding-left: 20vw;
+    padding-right: 20vw;
+}
