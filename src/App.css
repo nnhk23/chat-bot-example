@@ -1,5 +1,11 @@
+@import url('https://fonts.googleapis.com/css2?family=Kiwi+Maru&family=Roboto:wght@300;400&display=swap');
+
 .App {
   text-align: center;
-  background-color: rgba(140, 192, 247, 0.735);
-  height: 100vh;
+  height: fit-content;
+  font-family: 'Roboto', sans-serif;
+}
+
+h1 {
+  font-family: 'Kiwi Maru', serif;
 }
