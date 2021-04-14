@@ -19,38 +19,38 @@ export default function ChatBot() {
 
     const handleChange = (e) => setUserInput(e.target.value)
 
-    const matchReply = (userInput) => {
-        const trigger = [
-            ["hi", "hey", "hello"],
-            ["how are you", "how are things", "how you doing"],
-            ["what is going on", "what is up"],
-            ["happy", "good", "amazing", "fantastic", "cool"],
-            ["bad", "bored", "tired", "sad"],
-            ["thanks", "thank you"],
-            ["bye", "good bye", "goodbye"]
-        ];
-            
-        const reply = [
-            ["Hello", "Hi", "It's nice seeing you!"],
-            ["I'm doing good... how are you?", "I feel kind of lonely, how are you?", "I feel happy, how are you?"],
-            ["Nothing much", "Exciting things!", "I'm happy to see you!"],
-            ["Glad to hear it", "Yayyy!! That's the spirit!"],
-            ["There is always a rainbow after the rain!"],
-            ["You're welcome", "No problem", "It's my pleasure!"],
-            ["Goodbye, it was a nice talk"]
-        ];
+const matchReply = (userInput) => {
+    const trigger = [
+        ["hi", "hey", "hello"],
+        ["how are you", "how are things", "how you doing"],
+        ["what is going on", "what is up"],
+        ["happy", "good", "amazing", "fantastic", "cool"],
+        ["bad", "bored", "tired", "sad"],
+        ["thanks", "thank you"],
+        ["bye", "good bye", "goodbye"]
+    ];
         
-        const alternative = ["Same","Go on...","Try again please?", "I'm listening..."];
+    const reply = [
+        ["Hello", "Hi", "It's nice seeing you!"],
+        ["I'm doing good... how are you?", "I feel kind of lonely, how are you?", "I feel happy, how are you?"],
+        ["Nothing much", "Exciting things!", "I'm happy to see you!"],
+        ["Glad to hear it", "Yayyy!! That's the spirit!"],
+        ["There is always a rainbow after the rain!"],
+        ["You're welcome", "No problem", "It's my pleasure!"],
+        ["Goodbye, it was a nice talk"]
+    ];
+    
+    const alternative = ["Same","Go on...","Try again please?", "I'm listening..."];
 
-        let botMsg = generateReply(trigger, reply, userInput)
+    let botMsg = generateReply(trigger, reply, userInput)
 
-        if(!botMsg){
-            botMsg = alternative[Math.floor(Math.random()*alternative.length)]
-        }
-
-        setBotHistory([botMsg, ...botHistory])
-
+    if(!botMsg){
+        botMsg = alternative[Math.floor(Math.random()*alternative.length)]
     }
+
+    setBotHistory([botMsg, ...botHistory])
+    speak(botMsg)
+}
 
     const generateReply = (trigger, reply, text) => {
         let item;
@@ -66,27 +66,34 @@ export default function ChatBot() {
         return item;
     }
 
+    // initialize Web Speech API recognition
+    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition
+    const recognition = new SpeechRecognition();
+    recognition.lang = 'en-US';
+
+    // add chatbot's voice
+    const speak = (string) => {
+        const u = new SpeechSynthesisUtterance();
+        const allVoices = speechSynthesis.getVoices();
+        u.voice = allVoices.filter(voice => voice.name === "Alex")[0];
+        u.text = string;
+        u.lang = "en-US";
+        u.volume = 1;
+        u.rate = 1;
+        u.pitch = 1;
+        speechSynthesis.speak(u);
+    }
+
+    // translate voice to text
     const handleVoice = (recognition) => {
         recognition.start()
 
         recognition.onresult = function (event) {
             const resultIndx = event.resultIndex
             const transcript = event.results[resultIndx][0].transcript
-            localStorage.setItem('transcript', transcript)
+            setUserHistory([transcript, ...userHistory])
+            matchReply(transcript)
         }
-
-        let userTranscript
-
-        setTimeout(() => {
-            userTranscript = localStorage.getItem('transcript')
-        }, 3000);  
-        
-
-        setTimeout(() => {
-            if(userTranscript.length !== 0){
-                this.saveUserTranscript(userTranscript)
-            }
-        }, 4000);
     }
 
     return (
