@@ -66,6 +66,29 @@ export default function ChatBot() {
         return item;
     }
 
+    const handleVoice = (recognition) => {
+        recognition.start()
+
+        recognition.onresult = function (event) {
+            const resultIndx = event.resultIndex
+            const transcript = event.results[resultIndx][0].transcript
+            localStorage.setItem('transcript', transcript)
+        }
+
+        let userTranscript
+
+        setTimeout(() => {
+            userTranscript = localStorage.getItem('transcript')
+        }, 3000);  
+        
+
+        setTimeout(() => {
+            if(userTranscript.length !== 0){
+                this.saveUserTranscript(userTranscript)
+            }
+        }, 4000);
+    }
+
     return (
         <div className='chatbot-card'>
             <div>
@@ -87,6 +110,18 @@ export default function ChatBot() {
                         onChange={handleChange}
                         onKeyPress={onKeyUp}
                     />
+
+                    {/* adding micro phone icon for voice recognition */}
+                    <InputGroup.Append>                          
+                            <img 
+                                src='https://img.icons8.com/dusk/64/000000/microphone.png'
+                                alt='microphone-icon'
+                                variant='info' 
+                                type="submit" 
+                                className="mb-2 voice-chat-btn" 
+                                onClick={() => handleVoice(recognition)}
+                            />
+                    </InputGroup.Append>
 
                 </InputGroup>
             </div>

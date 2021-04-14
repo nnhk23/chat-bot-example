@@ -41,3 +41,12 @@ h3 {
     overflow-y: auto;
     height: 230px;
 }
+
+/* microphone customization */
+.voice-chat-btn {
+    width: 38px;
+    margin-bottom: 8px;
+    background-color: rgb(228, 223, 223);
+    border-radius: 5px;
+    padding: 5px;
+}
